@@ -1,0 +1,29 @@
+{
+  "name": "vue-goodreads",
+  "version": "1.0.0",
+  "description": "sample work for job interview",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EvanGrillo/vue-goodreads.git"
+  },
+  "keywords": [
+    "vue",
+    "goodreads",
+    "api",
+    "node-express"
+  ],
+  "author": "Evan Grillo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EvanGrillo/vue-goodreads/issues"
+  },
+  "homepage": "https://github.com/EvanGrillo/vue-goodreads#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
