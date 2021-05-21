@@ -1,0 +1,85 @@
+<html>
+	<head>
+		<title>Bookread Search</title>
+		<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+		<link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+		<link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+		<script src='/index.js'></script>
+	</head>
+		
+	<body>
+		<div id='app'>
+			<v-app>
+				<v-main>
+					<v-snackbar
+					v-model='alert_config.open'
+					:color='alert_config.color'
+					top
+					> {{alert_config.message}}
+					</v-snackbar>
+					<v-container>
+						<div v-if='loading'>
+							Loading...
+						</div>
+						<div v-else>
+							<v-row class='justify-center my-4'>
+								<v-btn
+									@click='search_query'
+								> Search
+								</v-btn>
+							</v-row>
+							<v-row class='justify-center'>
+								<v-col cols='12' lg='8'>
+									<v-card>
+										<v-card-title>
+											<v-text-field
+												@keyup.enter='search_query'
+												v-model='search'
+												append-icon="mdi-magnify"
+												label="Search"
+												placeholder='Search for Books'
+												single-line
+												hide-details
+											></v-text-field>
+										</v-card-title>
+										<v-data-table
+											:headers="headers"
+											:items="works"
+											item-key="id.$t"
+											:items-per-page="5"
+											show-expand
+										>
+											<template v-slot:expanded-item="{ headers, item }">
+												<td class='pa-0' :colspan="headers.length">
+													<v-row class='ma-0 pa-0 align-center'>
+														<img :src='item.best_book.image_url'>
+														<p class='ml-2'>Published on {{formatDate(item)}}</p>
+														<v-spacer></v-spacer>
+														<a target='_blank' v-bind:href='"https://www.google.com/search?q=" + item.best_book.title'>
+															<v-btn
+
+																text
+																depressed
+															> Continue Search
+															</v-btn>
+														</a>
+													</v-row>
+												</td>
+											</template>
+										</v-data-table>
+									</v-card>
+								</v-col>
+								
+							</v-row>
+							
+						</div>
+					</v-container>
+				</v-main>
+			  </v-app>
+			
+		</div>
+	</body>
+</html>

@@ -24,6 +24,9 @@
   },
   "homepage": "https://github.com/EvanGrillo/vue-goodreads#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "axios": "^0.21.1",
+    "dotenv": "^9.0.2",
+    "express": "^4.17.1",
+    "xml2json": "^0.12.0"
   }
 }
