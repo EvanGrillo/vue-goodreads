@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Bookread Search</title>
+		<title>Goodreads Search UI</title>
 		<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
 		<link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
 		<link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
@@ -21,21 +21,19 @@
 					> {{alert_config.message}}
 					</v-snackbar>
 					<v-container>
-						<div v-if='loading'>
-							Loading...
-						</div>
+						<v-progress-linear
+							v-if='loading'
+							indeterminate
+							class='mt-4'
+						>
+						</v-progress-linear>
 						<div v-else>
-							<v-row class='justify-center my-4'>
-								<v-btn
-									@click='search_query'
-								> Search
-								</v-btn>
-							</v-row>
 							<v-row class='justify-center'>
 								<v-col cols='12' lg='8'>
 									<v-card>
 										<v-card-title>
-											<v-text-field
+											<v-row class='ma-0 pa-0 align-center'>
+												<v-text-field
 												@keyup.enter='search_query'
 												v-model='search'
 												append-icon="mdi-magnify"
@@ -43,7 +41,14 @@
 												placeholder='Search for Books'
 												single-line
 												hide-details
-											></v-text-field>
+												></v-text-field>
+												<v-btn
+													depressed
+													class='ml-4'
+													@click='search_query'
+												> Search
+												</v-btn>
+											</v-row>
 										</v-card-title>
 										<v-data-table
 											:headers="headers"
@@ -60,7 +65,6 @@
 														<v-spacer></v-spacer>
 														<a target='_blank' v-bind:href='"https://www.google.com/search?q=" + item.best_book.title'>
 															<v-btn
-
 																text
 																depressed
 															> Continue Search

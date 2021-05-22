@@ -11,7 +11,6 @@ app.use(express.static('views'));
 app.get('/api/goodreads', async (req, res) => {
   try {
     let data = await query_goodreads(req.query);
-    res.status(200)
     res.send(data);
   } catch (err) {
     res.status(err.response.status)

@@ -46,9 +46,10 @@ window.addEventListener('load', function () {
                     item.original_publication_year.nil === "true"
                 ]
                 if (checks.includes(true)) {return 'NA'};
-                return `${item.original_publication_month.$t.trim()}/\n
-				${item.original_publication_day.$t.trim()}/\n
-				${item.original_publication_year.$t.trim()}`
+                let date = `${item.original_publication_month.$t}/\n
+				${item.original_publication_day.$t}/\n
+				${item.original_publication_year.$t}`;
+                return date.trim();
             }
         }
     })
