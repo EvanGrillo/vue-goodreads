@@ -6,6 +6,8 @@ window.addEventListener('load', function () {
         data: {
             loading: false,
             search: '',
+            page: 1,
+            total_pages: 0,
             q_result: null,
             headers: [
                 { text: 'Author', value: 'best_book.author.name' },
@@ -39,6 +41,11 @@ window.addEventListener('load', function () {
                 app.loading = true;
                 search_query();
             },
+            paginate_search: function(val) {
+                app.loading = true;
+                app.page = val;
+                search_query();
+            },
             formatDate: function(item) {
                 let checks = [
                     item.original_publication_month.nil === "true",
@@ -55,9 +62,11 @@ window.addEventListener('load', function () {
     })
 
     var search_query = async () => {
+        
         try {
-            const search = await axios.get(`/api/goodreads/?search=${app.search}&skip=0`);
+            const search = await axios.get(`/api/goodreads/?search=${app.search}&page=${app.page}`);
             app.q_result = search.data;
+            app.total_pages = parseInt(app.total_results / 20);
         } catch (err) {
             app.alert_config = {
                 open: true,
@@ -65,7 +74,6 @@ window.addEventListener('load', function () {
                 message: err.message
             }
         }
-        
         app.loading = false;
     }
 

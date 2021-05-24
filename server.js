@@ -21,7 +21,7 @@ app.get('/api/goodreads', async (req, res) => {
 async function query_goodreads(q) {
   let data;
   try {
-    data = await axios.get(`https://www.goodreads.com/search.xml?key=${API_KEY}&q=${q.search}`, {
+    data = await axios.get(`https://www.goodreads.com/search.xml?key=${API_KEY}&q=${q.search}&page=${q.page}`, {
     });
   } catch (err) {
     throw err;
@@ -36,6 +36,6 @@ function parse_xml_to_json(xml) {
   return data;
 }
 
-app.listen(port, () => {
+app.listen(port, () => { 
   console.log(`Listening at http://localhost:${port}`)
 });

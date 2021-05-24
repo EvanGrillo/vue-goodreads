@@ -9,38 +9,37 @@
 		<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
 		<script src='/index.js'></script>
 	</head>
-		
 	<body>
 		<div id='app'>
 			<v-app>
 				<v-main>
 					<v-snackbar
-					v-model='alert_config.open'
-					:color='alert_config.color'
-					top
+						v-model='alert_config.open'
+						:color='alert_config.color'
+						top
 					> {{alert_config.message}}
 					</v-snackbar>
 					<v-container>
 						<v-progress-linear
-							v-if='loading'
+							v-if='loading && !q_result'
 							indeterminate
 							class='mt-4'
 						>
 						</v-progress-linear>
 						<div v-else>
 							<v-row class='justify-center'>
-								<v-col cols='12' lg='8'>
+								<v-col cols='12' lg='8' class='pa-0'>
 									<v-card>
 										<v-card-title>
 											<v-row class='ma-0 pa-0 align-center'>
 												<v-text-field
-												@keyup.enter='search_query'
-												v-model='search'
-												append-icon="mdi-magnify"
-												label="Search"
-												placeholder='Search for Books'
-												single-line
-												hide-details
+													@keyup.enter='search_query'
+													v-model='search'
+													append-icon="mdi-magnify"
+													label="Search"
+													placeholder='Search for Books'
+													single-line
+													hide-details
 												></v-text-field>
 												<v-btn
 													depressed
@@ -54,8 +53,10 @@
 											:headers="headers"
 											:items="works"
 											item-key="id.$t"
-											:items-per-page="5"
+											disable-pagination
+          									:hide-default-footer="true"
 											show-expand
+											:loading='loading'
 										>
 											<template v-slot:expanded-item="{ headers, item }">
 												<td class='pa-0' :colspan="headers.length">
@@ -74,16 +75,21 @@
 												</td>
 											</template>
 										</v-data-table>
+										<v-row class='justify-center ma-0 py-4'>
+											<v-pagination
+												v-model="page"
+												total-visible="5"
+												:length='total_pages'
+												@input="paginate_search"
+											></v-pagination>
+										</v-row>
 									</v-card>
 								</v-col>
-								
 							</v-row>
-							
 						</div>
 					</v-container>
 				</v-main>
-			  </v-app>
-			
+			</v-app>
 		</div>
 	</body>
 </html>
