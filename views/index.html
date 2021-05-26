@@ -1,5 +1,6 @@
 <html>
 	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Goodreads Search UI</title>
 		<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
 		<link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
@@ -52,7 +53,7 @@
 										<v-data-table
 											:headers="headers"
 											:items="works"
-											item-key="id.$t"
+											item-key="_id"
 											disable-pagination
           									:hide-default-footer="true"
 											show-expand
@@ -61,10 +62,10 @@
 											<template v-slot:expanded-item="{ headers, item }">
 												<td class='pa-0' :colspan="headers.length">
 													<v-row class='ma-0 pa-0 align-center'>
-														<img :src='item.best_book.image_url'>
+														<img :src='item.cover_image'>
 														<p class='ml-2'>Published on {{formatDate(item)}}</p>
 														<v-spacer></v-spacer>
-														<a target='_blank' v-bind:href='"https://www.google.com/search?q=" + item.best_book.title'>
+														<a target='_blank' v-bind:href='"https://www.google.com/search?q=" + item.title'>
 															<v-btn
 																text
 																depressed

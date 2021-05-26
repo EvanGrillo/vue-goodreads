@@ -10,10 +10,10 @@ window.addEventListener('load', function () {
             total_pages: 0,
             q_result: null,
             headers: [
-                { text: 'Author', value: 'best_book.author.name' },
-                { text: 'Title', value: 'best_book.title' },
-                { text: 'Avg. Rating', value: 'average_rating' },
-                { text: 'Year', value: 'original_publication_year.$t' }
+                { text: 'Author', value: 'author' },
+                { text: 'Title', value: 'title' },
+                { text: 'Avg. Rating', value: 'avg_rating'},
+                { text: 'Year', value: 'year' }
             ],
             alert_config: {
                 open: false,
@@ -24,8 +24,22 @@ window.addEventListener('load', function () {
         },
         computed: {
             works: function () {
-              if (!this.q_result) return [];
-              return this.q_result.results.work;
+                if (!this.q_result) return [];
+                return this.q_result.results.work.map((item) => {
+                    return {
+                        _id: item.id.$t,
+                        author: item.best_book.author.name,
+                        title: item.best_book.title,
+                        avg_rating: parseInt(item.average_rating) || 'NA',
+                        year: item.original_publication_year.$t,
+                        cover_image: item.best_book.image_url,
+                        publish_date: {
+                            month: parseInt(item.original_publication_month.$t) || null,
+                            day: parseInt(item.original_publication_day.$t) || null,
+                            year: parseInt(item.original_publication_year.$t) || null,
+                        }
+                    }
+                });
             },
             total_results: function () {
                 if (!this.q_result) return 0;
@@ -48,15 +62,16 @@ window.addEventListener('load', function () {
             },
             formatDate: function(item) {
                 let checks = [
-                    item.original_publication_month.nil === "true",
-                    item.original_publication_day.nil === "true",
-                    item.original_publication_year.nil === "true"
+                    !item.publish_date.month,
+                    !item.publish_date.day,
+                    !item.publish_date.year
                 ]
                 if (checks.includes(true)) {return 'NA'};
-                let date = `${item.original_publication_month.$t}/\n
-				${item.original_publication_day.$t}/\n
-				${item.original_publication_year.$t}`;
-                return date.trim();
+                let date = `\n
+                ${item.publish_date.month}/\n
+				${item.publish_date.day}/\n
+				${item.publish_date.year}`;
+                return date.replace(/(\r\n|\t|\n|\r|\t)/gm,"");
             }
         }
     })
