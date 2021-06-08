@@ -8,7 +8,7 @@ window.addEventListener('load', function () {
             search: '',
             page: 1,
             total_pages: 0,
-            q_result: null,
+            q_result: {},
             headers: [
                 { text: 'Author', value: 'author' },
                 { text: 'Title', value: 'title' },
@@ -20,30 +20,29 @@ window.addEventListener('load', function () {
                 message: '',
                 color: '#00C853'
             }
-            
         },
         computed: {
             works: function () {
-                if (!this.q_result) return [];
-                return this.q_result.results.work.map((item) => {
+                if (!this.q_result.results) return [];
+                return this.q_result.results.map((item) => {
                     return {
-                        _id: item.id.$t,
-                        author: item.best_book.author.name,
-                        title: item.best_book.title,
-                        avg_rating: parseInt(item.average_rating) || 'NA',
-                        year: item.original_publication_year.$t,
-                        cover_image: item.best_book.image_url,
+                        _id: item._id,
+                        author: item.author,
+                        title: item.title,
+                        avg_rating: Number(item.average_rating) || 'NA',
+                        year: Number(item.publish_year),
+                        cover_image: item.image_url,
                         publish_date: {
-                            month: parseInt(item.original_publication_month.$t) || null,
-                            day: parseInt(item.original_publication_day.$t) || null,
-                            year: parseInt(item.original_publication_year.$t) || null,
+                            month: Number(item.publish_month),
+                            day: Number(item.publish_day),
+                            year: Number(item.publish_year),
                         }
                     }
                 });
             },
             total_results: function () {
                 if (!this.q_result) return 0;
-                return this.q_result['total-results'];
+                return Number(this.q_result.total_results) || 0;
             },
             query: function () {
                 if (!this.q_result) return '';
@@ -53,9 +52,11 @@ window.addEventListener('load', function () {
         methods: {
             search_query: function() {
                 app.loading = true;
+                analyze_search_str();
                 search_query();
             },
             paginate_search: function(val) {
+                window.scrollTo(0,0);
                 app.loading = true;
                 app.page = val;
                 search_query();
@@ -76,12 +77,19 @@ window.addEventListener('load', function () {
         }
     })
 
-    var search_query = async () => {
-        
+    search_query = async () => {
+
         try {
             const search = await axios.get(`/api/goodreads/?search=${app.search}&page=${app.page}`);
             app.q_result = search.data;
-            app.total_pages = parseInt(app.total_results / 20);
+            app.total_pages = Math.ceil(app.total_results / 20);
+            if (!search.data.results) {
+                app.alert_config = {
+                    open: true,
+                    color: '#D50000',
+                    message: 'No results. Try to refine your search.'
+                }
+            }
         } catch (err) {
             app.alert_config = {
                 open: true,
@@ -90,6 +98,16 @@ window.addEventListener('load', function () {
             }
         }
         app.loading = false;
+    }
+
+    analyze_search_str = () => {
+        results = (/[?&]page(=([^&#]*)|&|#|$)/).exec(app.search);
+        if (!results) {
+            return app.page = 1;
+        }
+        page = decodeURIComponent(results[2].replace(/\+/g, ' '));
+        app.page = Number(page);
+        app.search = app.search.split(/[?]|[&]/)[0];
     }
 
 })
