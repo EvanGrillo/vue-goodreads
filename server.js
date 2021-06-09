@@ -32,7 +32,7 @@ parse_xml = (data) => {
     return {
 		total_results: Number((/<total-results>([\s\S]*?)<\/total-results>/i).exec(data)[1]) || 0,
 		results: (
-            data.match(/<work>([\s\S]*?)<\/work>/gi)
+            (data.match(/<work>([\s\S]*?)<\/work>/gi) || [])
             .map((w) => {
                 return {
                     _id: (w.match(/<id type="integer">([\s\S]*?)<\/id>/) || [])[1] || null,

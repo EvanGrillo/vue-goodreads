@@ -83,7 +83,7 @@ window.addEventListener('load', function () {
             const search = await axios.get(`/api/goodreads/?search=${app.search}&page=${app.page}`);
             app.q_result = search.data;
             app.total_pages = Math.ceil(app.total_results / 20);
-            if (!search.data.results) {
+            if (!search.data.results.length) {
                 app.alert_config = {
                     open: true,
                     color: '#D50000',
