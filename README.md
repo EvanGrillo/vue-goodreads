@@ -8,7 +8,7 @@ URL: https://cryptic-inlet-50264.herokuapp.com/
 
 - Express
 - Axios
-- Vue (development mode)
+- Vue
 - Vuetify + Material Design Icons + Roboto Google Font
 
 ### Building / Running

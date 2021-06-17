@@ -6,6 +6,15 @@ require('dotenv').config();
 const API_KEY = process.env.GOODREADS_KEY;
 
 app.use(express.static('views'));
+app.set('view engine', 'pug');
+
+app.get('/', function (req, res) {
+	let devMode = Boolean(req.query.dev);
+	res.render('index', {
+		title: 'Goodreads Search UI', 
+		devMode: devMode
+	})
+})
 
 app.get('/api/goodreads', async (req, res) => {
 	try {
@@ -20,8 +29,7 @@ app.get('/api/goodreads', async (req, res) => {
 query_goodreads = async (q) => {
 	let data;
 	try {
-		data = await axios.get(`https://www.goodreads.com/search.xml?key=${API_KEY}&q=${q.search}&page=${q.page}`, {
-		});
+		data = await axios.get(`https://www.goodreads.com/search.xml?key=${API_KEY}&q=${q.search}&page=${q.page}`);
 	} catch (err) {
 		throw err;
 	}
@@ -50,5 +58,5 @@ parse_xml = (data) => {
 }
 
 app.listen(port, () => { 
-	console.log(`Listening at http://localhost:${port}`)
+	console.log(`Listening at ${port}`)
 });
